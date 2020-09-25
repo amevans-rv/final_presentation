@@ -27,7 +27,8 @@ var db *sql.DB
 func main() {
 
 	var err error
-	db, err = sql.Open("mysql", "root:supersecretpw@tcp(products:3306)/products")
+	//													container:port /db
+	db, err = sql.Open("mysql", "root:supersecretpw@tcp(database:3306)/products")
 
 	if err != nil {
 		panic(err.Error())
