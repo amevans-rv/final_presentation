@@ -1,9 +1,9 @@
 version : '3.7'
 services:
-    products:
+    database:
         container_name: sqldb
         build:
-            context: ./products
+            context: ./database
         environment: 
             MYSQL_ROOT_PASSWORD: supersecretpw
             MYSQL_DATABASE: products
@@ -21,7 +21,7 @@ services:
             - frontend
             - backend
         depends_on:
-            - products
+            - database
     frontend:
         container_name: front_end
         build: 
@@ -31,7 +31,7 @@ services:
         networks:
             - frontend
         depends_on:
-            - products
+            - database
             - app
 networks:
     frontend:
