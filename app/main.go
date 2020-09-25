@@ -11,7 +11,6 @@ import (
 )
 
 type product struct {
-	// go value	  datatype   assigning the field name in json file
 	ID       string `json:"id"`
 	Name     string `json:"pname"`
 	Img      string `json:"img"`

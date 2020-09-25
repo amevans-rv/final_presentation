@@ -46,10 +46,37 @@ filterCategory();
 
 var pageDetails = document.getElementById('productsDiv').innerHTML
 
+var desktops = document.querySelector("#productsDiv > section.desktops.allProducts")
+var laptops = document.querySelector("#productsDiv > section.laptops.allProducts")
+var headsets = document.querySelector("#productsDiv > section.headsets.allProducts")
+var mice = document.querySelector("#productsDiv > section.mice.allProducts")
+
 fetch (`http://localhost:8000/products`)
 .then (response => {
     return response.json()
 })
 .then (data => {
-    console.log(data[0].category)
+    for (i = 0; i < data.length; i++) {
+
+        var setProduct = `
+        <div class='items'>
+            <a href='productdetails.html'><img src=${data[i].img} alt="need to add image descriptions"></a>
+            <p>${data[i].pname}</p>
+            <p class='price'>${data[i].price}</p>
+        </div>
+        `
+
+        if (data[i].category === 'desktop') {
+            desktops.innerHTML += setProduct;
+        } else if (data[i].category === 'laptop') {
+            laptops.innerHTML += setProduct;
+        } else if (data[i].category === 'headset') {
+            headsets.innerHTML += setProduct;
+        } else if (data[i].category === 'mouse') {
+            mice.innerHTML += setProduct;
+        } else {
+            console.log('Category not defined.')
+        }
+
+    }
 })
