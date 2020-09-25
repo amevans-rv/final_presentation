@@ -11,23 +11,24 @@ import (
 )
 
 type product struct {
-	ID       string `json:"prod_id"`
-	Category string `json:"prod_category"`
-	Name     string `json:"prod_name"`
-	Price    string `json:"prod_price"`
-	Img      string `json:"prod_img"`
+	// go value	  datatype   assigning the field name in json file
+	ID       string `json:"id"`
+	Name     string `json:"pname"`
+	Img      string `json:"img"`
+	Price    string `json:"price"`
+	Category string `json:"category"`
 }
 
 func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*") // '*' Would normally include a whitelist
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
 var db *sql.DB
 
 func main() {
-	var err error
 
-	db, err := sql.Open("mysql", "root:supersecretpw@tcp(databases:3306)/products")
+	var err error
+	db, err = sql.Open("mysql", "root:supersecretpw@tcp(products:3306)/products")
 
 	if err != nil {
 		panic(err.Error())
@@ -37,18 +38,19 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/products", getProds)
+	router.HandleFunc("/products", fetchProducts).Methods("GET")
 
-	log.Println("Starting server on Port: 8000")
+	log.Println("listening on port 8000")
+
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
-func getProds(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w) // Pointing to the location of response writer
+func fetchProducts(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 
 	var products []product
 
-	stmt := "SELECT id, pname, img, price, catergory FROM products"
+	stmt := "SELECT id, pname, img, price, category FROM products"
 	rows, err := db.Query(stmt)
 
 	if err != nil {
@@ -62,11 +64,16 @@ func getProds(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err.Error())
 		}
+
+		products = append(products, product)
 	}
 
-	// products = append(products, product)
+	log.Println(products)
 
+	// sets status 200
 	w.WriteHeader(http.StatusOK)
+	// lets browser know we are sending json text
 	w.Header().Set("Content-Type", "application/json")
+	// converts products slice into json
 	json.NewEncoder(w).Encode(products)
 }

@@ -1,5 +1,4 @@
 (function() {
-    console.log(localStorage.searchText)
     if (localStorage.searchText == "Desktop" || localStorage.category == "Desktop") {
         document.querySelector("#product-type").value = "desktops"
     } else if (localStorage.searchText == "Laptop" || localStorage.category == "Laptop") {
@@ -44,3 +43,13 @@ const filterCategory = () => {
 }
 
 filterCategory();
+
+var pageDetails = document.getElementById('productsDiv').innerHTML
+
+fetch (`http://localhost:8000/products`)
+.then (response => {
+    return response.json()
+})
+.then (data => {
+    console.log(data[0].category)
+})

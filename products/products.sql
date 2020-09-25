@@ -1,12 +1,14 @@
+USE products;
+
 CREATE TABLE products (
-    prod_id INT AUTO_INCREMENT PRIMARY KEY,
-    prod_category VARCHAR(100),
-    prod_name VARCHAR(100),
-    prod_price DECIMAL(7,2),
-    prod_img VARCHAR(100)
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    pname VARCHAR(100) NOT NULL,
+    price DECIMAL(7,2)NOT NULL,
+    img VARCHAR(100) NOT NULL
 );
 
-INSERT INTO products (prod_category, prod_name, prod_price, prod_img) VALUES
+INSERT INTO products (category, pname, price, img) VALUES
     ('desktop', 'Wyse 3040 Thin Client', 378.00, 'images/desktops/desk_product1/pic1.png'),
     ('desktop', 'SkyTech Archangel Gaming Desktop', 1199.00, 'images/desktops/desk_product2/pic1.jpg'),
     ('desktop', 'ABS Prism S', 2499.00, 'images/desktops/desk_product3/pic1.jpg'),

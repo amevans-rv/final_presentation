@@ -1,43 +1,38 @@
-version : '3.8'
+version : '3.7'
 services:
-    mysql:
+    products:
         container_name: sqldb
         build:
-            context: databases
-        image: mysql:8.0.2
+            context: ./products
         environment: 
             MYSQL_ROOT_PASSWORD: supersecretpw
-            MYSQL_DATABASE: final_project
+            MYSQL_DATABASE: products
         ports:
-            - "3300:3306"
+            - "3000:3306"
         networks:
             - backend
-    backend:
+    app:
         container_name: go_api
-        image: golang:1.14
         build:
             context: ./app
+        ports:
+            - "8000:8000"
         networks:
+            - frontend
             - backend
         depends_on:
-            - mysql
-        ports:
-            - "8020:8020"
-        expose:
-            - "8020"
-    front_end:
+            - products
+    frontend:
+        container_name: front_end
         build: 
-            context: frontend
-        image: nginx
-        container_name: frontend
+            context: ./frontend
         ports:
-            - 9000:80
+            - 4000:80
         networks:
-            - backend
             - frontend
         depends_on:
-            - backend
-            - mysql
+            - products
+            - app
 networks:
     frontend:
     backend:
