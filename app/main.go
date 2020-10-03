@@ -65,6 +65,9 @@ func fetchProducts(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 		}
 
+		// log.Println(product)
+		// log.Println(rows.Scan(&product.ID))
+
 		products = append(products, product)
 	}
 

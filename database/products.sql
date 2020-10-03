@@ -4,11 +4,12 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     category VARCHAR(255) NOT NULL,
     pname VARCHAR(100) NOT NULL,
-    price DECIMAL(7,2)NOT NULL,
+    price DECIMAL(7,2) NOT NULL,
     img VARCHAR(100) NOT NULL
 );
 
 INSERT INTO products (category, pname, price, img) VALUES
+    ('desktop', 'Wyse 3040 Thin Client', 378.00, 'images/desktops/desk_product1/pic1.png'),
     ('desktop', 'Wyse 3040 Thin Client', 378.00, 'images/desktops/desk_product1/pic1.png'),
     ('desktop', 'SkyTech Archangel Gaming Desktop', 1199.00, 'images/desktops/desk_product2/pic1.jpg'),
     ('desktop', 'ABS Prism S', 2499.00, 'images/desktops/desk_product3/pic1.jpg'),
