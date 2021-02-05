@@ -27,9 +27,8 @@ var db *sql.DB
 func main() {
 
 	var err error
-	//													container:port /db
-	db, err = sql.Open("mysql", "root:supersecretpw@tcp(database:3306)/products")
 
+	db, err := sql.Open("mysql", "root:supersecretpw@tcp(database:3306)/products")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -65,13 +64,10 @@ func fetchProducts(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 		}
 
-		// log.Println(product)
-		// log.Println(rows.Scan(&product.ID))
-
 		products = append(products, product)
 	}
 
-	log.Println(products)
+	log.Println("Products returned from DB")
 
 	// sets status 200
 	w.WriteHeader(http.StatusOK)
