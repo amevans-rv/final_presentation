@@ -18,23 +18,7 @@ type product struct {
 	Category string `json:"category"`
 }
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
-
-var db *sql.DB
-
 func main() {
-
-	var err error
-
-	db, err := sql.Open("mysql", "root:supersecretpw@tcp(database:3306)/products")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	defer db.Close()
-
 	router := mux.NewRouter()
 
 	router.HandleFunc("/products", fetchProducts).Methods("GET")
@@ -44,24 +28,34 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func fetchProducts(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
+
+	db, err := sql.Open("mysql", "root:supersecretpw@tcp(database:3306)/products")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
 
 	var products []product
 
 	stmt := "SELECT id, pname, img, price, category FROM products"
 	rows, err := db.Query(stmt)
-
 	if err != nil {
 		panic(err.Error())
 	}
 
 	for rows.Next() {
 		var product product
-		err := rows.Scan(&product.ID, &product.Name, &product.Img, &product.Price, &product.Category)
 
+		err := rows.Scan(&product.ID, &product.Name, &product.Img, &product.Price, &product.Category)
 		if err != nil {
-			panic(err.Error())
+			w.WriteHeader(http.StatusBadRequest)
 		}
 
 		products = append(products, product)
@@ -69,10 +63,6 @@ func fetchProducts(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Products returned from DB")
 
-	// sets status 200
 	w.WriteHeader(http.StatusOK)
-	// lets browser know we are sending json text
-	w.Header().Set("Content-Type", "application/json")
-	// converts products slice into json
 	json.NewEncoder(w).Encode(products)
 }
